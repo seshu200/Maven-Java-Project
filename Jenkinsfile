@@ -5,6 +5,12 @@ def remote = [:]
     	remote.user = 'root'
     	remote.password = 'vagrant'
     	remote.allowAnyHosts = true
+def remote1 = [:]
+    	remote1.name = 'Deploy-to-Prod'
+	remote1.host = '192.168.56.65'
+	remote1.user = 'ansible'
+	remote1.password = 'welcome'
+    	remote1.allowAnyHosts = true
 pipeline {
     
 	agent none
@@ -59,7 +65,8 @@ pipeline {
 		    //SCP-Publisher Plugin (Optional)
 		    steps {
 		        //sshScript remote: remote, script: "abc.sh"  	
-			sshPut remote: remote, from: 'target/java-maven-1.0-SNAPSHOT.war', into: '/root/workspace/tomcat8/webapps/webapp.war'		        
+			sshPut remote: remote, from: 'target/java-maven-1.0-SNAPSHOT.war', into: '/root/workspace/tomcat8/webapps'
+			
 		    }
     	}
     	stage ('Integration-Test') {
@@ -97,7 +104,10 @@ pipeline {
 				unstash 'Source'
 				sh "'${mvnHome}/bin/mvn' clean package"				
 			}
-			
+			steps {
+			      sshPut remote1: remote1, from: 'target/java-maven-1.0-SNAPSHOT.war', into: '/home/ansible/workspace/ansible-files/ansibleRoles/tomcat/files/webapp.war'
+			      }
+
 			post {
 				always {
 					archiveArtifacts '**/*.war'
