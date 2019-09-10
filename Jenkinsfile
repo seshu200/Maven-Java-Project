@@ -19,7 +19,7 @@ pipeline {
 		        label 'slave'
 		    }
 		    steps {
-			    git 'https://github.com/venkat09docs/Maven-Java-Project.git'
+			    git 'https://github.com/seshu200/Maven-Java-Project'
 			    stash 'Source'
 			    script{
 			        mvnHome = tool 'maven3'
