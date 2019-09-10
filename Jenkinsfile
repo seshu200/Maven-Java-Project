@@ -97,15 +97,16 @@ pipeline {
 				unstash 'Source'
 				sh "'${mvnHome}/bin/mvn' clean package"				
 			}
-			steps {
-				sshPublisher(publishers: [sshPublisherDesc(configName: 'ansible-controller', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd workspace/ansible-files/
-                                git pull origin master
-                                 ansible-playbook ansibleRoles/tomcat.yml''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'workspace/ansible-files/ansibleRoles/tomcat/files/', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.webapp.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-			}
+			
 			post {
 				always {
 					archiveArtifacts '**/*.war'
 				}
+	              steps {
+				sshPublisher(publishers: [sshPublisherDesc(configName: 'ansible-controller', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd workspace/ansible-files/
+                                git pull origin master
+                                 ansible-playbook ansibleRoles/tomcat.yml''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'workspace/ansible-files/ansibleRoles/tomcat/files/', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.webapp.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+		      }
 			}
 		}
     	
