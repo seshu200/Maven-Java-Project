@@ -104,13 +104,13 @@ pipeline {
 				unstash 'Source'
 				sh "'${mvnHome}/bin/mvn' clean package"				
 			}
-			steps {
-			      sshPut remote1: remote1, from: 'target/java-maven-1.0-SNAPSHOT.war', into: '/home/ansible/workspace/ansible-files/ansibleRoles/tomcat/files/webapp.war'
-			      }
+			
 
 			post {
 				always {
 					archiveArtifacts '**/*.war'
+			      sshPut remote1: remote1, from: 'target/java-maven-1.0-SNAPSHOT.war', into: '/home/ansible/workspace/ansible-files/ansibleRoles/tomcat/files/webapp.war'
+			      
 				}
 	             
 			}
