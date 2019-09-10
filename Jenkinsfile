@@ -4,12 +4,9 @@ def remote = [:]
     	remote.host = '192.168.33.15'
     	remote.user = 'root'
     	remote.password = 'vagrant'
-    	remote.allowAnyHosts = true
-def remote = [:]
-    	remote.name = 'Deploy-to-Prod'
 	remote.host = '192.168.56.65'
-	remote.user = 'ansible'
-	remote.password = 'welcome'
+    	remote.user = 'ansible'
+    	remote.password = 'welcome'
     	remote.allowAnyHosts = true
 pipeline {
     
@@ -103,14 +100,12 @@ pipeline {
 			steps {
 				unstash 'Source'
 				sh "'${mvnHome}/bin/mvn' clean package"				
-			}
-			
+			        sshPut remote: remote, from: 'target/java-maven-1.0-SNAPSHOT.war', into: '/home/ansible/workspace/ansible-files/ansibleRoles/tomcat/files/webapp.war'
+			      }
 
 			post {
 				always {
 					archiveArtifacts '**/*.war'
-			      sshPut remote: remote, from: 'target/java-maven-1.0-SNAPSHOT.war', into: '/home/ansible/workspace/ansible-files/ansibleRoles/tomcat/files/webapp.war'
-			      
 				}
 	             
 			}
