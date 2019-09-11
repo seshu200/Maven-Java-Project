@@ -6,7 +6,7 @@ def remote = [:]
     	remote.password = 'vagrant'
 	remote.host = '192.168.56.65'
     	remote.user = 'ansible'
-    	remote.password = ''
+    	remote.password = 'welcome'
     	remote.allowAnyHosts = true
 pipeline {
     
