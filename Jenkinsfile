@@ -1,13 +1,15 @@
 def mvnHome
-def remote = [:]
-    	remote.name = 'deploy'
-    	remote.host = '192.168.33.15'
-    	remote.user = 'root'
-    	remote.password = 'vagrant'
-	remote.host = '192.168.56.65'
-    	remote.user = 'ansible'
-    	remote.password = 'welcome'
-    	remote.allowAnyHosts = true
+def remote1 = [:]
+    	remote1.name = 'deploy'
+    	remote1.host = '192.168.33.15'
+    	remote1.user = 'root'
+    	remote1.password = 'vagrant'
+	remote2.allowAnyHosts = true
+def remote2 = [:]
+	remote2.host = '192.168.56.65'
+    	remote2.user = 'ansible'
+    	remote2.password = 'welcome'
+    	remote2.allowAnyHosts = true
 pipeline {
     
 	agent none
@@ -62,7 +64,7 @@ pipeline {
 		    //SCP-Publisher Plugin (Optional)
 		    steps {
 		        //sshScript remote: remote, script: "abc.sh"  	
-			sshPut remote: remote, from: 'target/java-maven-1.0-SNAPSHOT.war', into: '/root/workspace/tomcat8/webapps'
+			sshPut remote: remote1, from: 'target/java-maven-1.0-SNAPSHOT.war', into: '/root/workspace/tomcat8/webapps'
 			
 		    }
     	}
@@ -100,7 +102,7 @@ pipeline {
 			steps {
 				unstash 'Source'
 				sh "'${mvnHome}/bin/mvn' clean package"				
-			        sshPut remote: remote, from: 'target/java-maven-1.0-SNAPSHOT.war', into: '/home/ansible/workspace/ansible-files/ansibleRoles/tomcat/files/webapp.war'
+			        sshPut remote: remote2, from: 'target/java-maven-1.0-SNAPSHOT.war', into: '/home/ansible/workspace/ansible-files/ansibleRoles/tomcat/files/'
 			      }
 
 			post {
